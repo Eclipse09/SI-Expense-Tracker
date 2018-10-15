@@ -1,0 +1,15 @@
+<!--index.wxml-->
+
+<view class="userinfo">
+  <image wx:if="{{avatarUrl}}" class="userinfo-avatar" src="{{avatarUrl}}"></image>
+  <text class="userinfo-nickname">{{nickName}}</text>
+</view>
+<view class='ui-flex ui-flex-center'>
+  <text class='app-color'>意见反馈</text>
+  <view class='kefu'>
+    <contact-button class='' type="default-light" size="30" session-from="weapp"></contact-button>
+  </view>
+</view>
+
+
+<button class="button-full" bindtap="exportBill">生成当月账单</button>

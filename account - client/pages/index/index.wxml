@@ -1,0 +1,57 @@
+
+<!--index.wxml-->
+<view class="content-view">
+  <view class="ui-flex  ui-p20 subtitle">
+    <text>今日消费</text>
+    <text class="text-today-expend-num">￥{{todayMoney}}</text>
+  </view>
+</view>
+
+<view class="ui-flex-ver ui-height-100">
+
+  <!--顶部查询时间选择-->
+  <view class="date-select">
+    <view class="ui-ml20 subtitle">从</view>
+    <picker class="ui-ml20" mode="date" value="{{startDate}}" start="2018-07-01" end="endDate" bindchange="startDateChange">
+      <view class="picker-date">
+        {{startDate}}
+      </view>
+    </picker>
+    <view class="ui-ml20 subtitle">至</view>
+    <picker class="ui-ml20" mode="date" value="{{startDate}}" start="startdDate" end="today" bindchange="endDateChange">
+      <view class="picker-date">
+        {{endDate}}
+      </view>
+    </picker>
+  </view>
+  <view class="line"></view>
+  <view class='ui-p10 subtitle'>
+    <text>共消费:</text>
+    <text class="picker-date ui-ml20">{{totalMoney}}</text>
+  </view>
+  <view class="line"></view>
+  <!--文字标题-->
+  <view class="history-bill-table-title">
+    <view class="ui-flex-1">时间</view>
+    <view class="ui-flex-1">消费金额</view>
+    <view class="ui-flex-1">备注</view>
+  </view>
+  <view class="line"></view>
+
+
+  <!--账单列表-->
+  <view class='view-scroll'>
+    <scroll-view scroll-y="true" class="ui-height-100 ">
+      <block wx:for="{{historyBillList}}">
+        <view class="history-bill-list " bindtap="onHisterBillItemClick" data-id="{{item.id}}" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+          <view class="ui-flex-1">{{item.date}}</view>
+          <view class="ui-flex-1">￥{{item.spendMoney}}</view>
+          <view class="ui-flex-1 ui-flex ui-flex-center ">
+            <image class="spend-way-icon" src="{{item.purposeIcon}}"></image>
+            <text class="item-remarks">{{item.remark}}</text>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+</view>

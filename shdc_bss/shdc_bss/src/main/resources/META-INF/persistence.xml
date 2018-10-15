@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+	<persistence-unit name="baofcUN"> 
+		<properties>
+			<property name="hibernate.max_fetch_depth" value="3"/><!-- 设置外连接抓取树的最大深度 -->
+			<property name="hibernate.jdbc.fetch_size" value="18"/>
+			<property name="hibernate.jdbc.batch_size" value="10"/>
+			<property name="hibernate.show_sql" value="false"/> 
+			<property name="hibernate.format_sql" value="true"/> 
+			<property name="hibernate.use_sql_comments" value="false"/> 
+			<property name="hibernate.hbm2ddl.auto" value="none"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"/>
+		</properties>
+	</persistence-unit>
+    <persistence-unit name="shdclocal" transaction-type="RESOURCE_LOCAL"> 
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<properties> 
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/> 
+			<property name="hibernate.connection.url" value="jdbc:mysql://180.101.204.85:3306/zhangben?characterEncoding=utf-8"/> 
+			<property name="hibernate.connection.username" value="root"/> 
+			<property name="hibernate.connection.password" value="dev@123"/> 
+			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle9iDialect"/>		 
+			<property name="hibernate.show_sql" value="false"/> 
+			<property name="hibernate.format_sql" value="true"/> 
+			<property name="hibernate.use_sql_comments" value="false"/> 
+			<property name="hibernate.hbm2ddl.auto" value="none"/>
+			<property name="hibernate.generate_statistics" value="false"/>
+			<!-- ehcache
+			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider"/>
+			<property name="net.sf.ehcache.configurationResourceName" value="ehcache.xml"/>
+			<property name="hibernate.cache.use_second_level_cache" value="true"/>
+			<property name="hibernate.cache.use_structured_entries" value="true"/>
+			<property name="hibernate.cache.use_query_cache" value="true"/>
+			 -->
+			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
+            <property name="hibernate.c3p0.min_size" value="1" />
+            <property name="hibernate.c3p0.max_size" value="10" />
+            <property name="hibernate.c3p0.initialPoolSize" value="1" />
+            <property name="hibernate.c3p0.numHelperThreads" value="3" />
+            <property name="hibernate.c3p0.maxPoolSize" value="10" />
+            <property name="hibernate.c3p0.minPoolSize" value="1" />
+            <property name="hibernate.c3p0.maxIdleTime" value="2500" />
+            <property name="hibernate.c3p0.maxStatements" value="50" />
+		</properties>
+	</persistence-unit>
+</persistence>

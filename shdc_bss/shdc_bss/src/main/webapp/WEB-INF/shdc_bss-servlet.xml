@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	- DispatcherServlet application context for PetClinic's web tier.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+		xmlns:oxm="http://www.springframework.org/schema/oxm" xmlns:mvc="http://www.springframework.org/schema/mvc"
+		xmlns:aop="http://www.springframework.org/schema/aop" 
+		xmlns:task="http://www.springframework.org/schema/task" 
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+				http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd 
+				http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+				http://www.springframework.org/schema/task
+			http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+				
+	<!--				
+		- The controllers are autodetected POJOs labeled with the @Controller annotation.
+		<import resource="datasources_${baocors_datapath}.xml"/>
+	-->
+	<import resource="datasources_dev.xml"/>
+    <import resource="cxf-webservice.xml"/>
+	   
+	<context:component-scan base-package="com.bsteel.shdc"/>
+	
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>  
+	        <tx:method name="*"  
+                      propagation="REQUIRED"  
+                      isolation="DEFAULT"  
+                      timeout="-1"  
+                      read-only="false"  
+                      no-rollback-for=""    
+                      rollback-for="java.lang.Exception"/>  
+	    </tx:attributes>  
+	</tx:advice>  
+	<!-- Spring AOP config -->	
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="servicesPointcut"
+            expression="execution(* com.bsteel.shdc..service..*Impl.*(..))" />
+        <aop:advisor advice-ref="txAdvice"  pointcut-ref="servicesPointcut" />
+    </aop:config>
+	<mvc:annotation-driven />
+	
+    <jpa:repositories base-package="com.bsteel.shdc"  repository-impl-postfix="Impl" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager"/>
+	
+	<!-- <bean id="waxberryContext" class="com.waxberry.WaxberryContext"></bean> -->
+	<!-- duzheyu 2014/03/28 -->
+    <!--  <bean id="springApplicationContext"
+        class="com.bsteel.shdc.permission.util.SpringApplicationContext">
+    </bean>  
+    <bean id="permissionToJudge"
+		class="com.bsteel.shdc.permission.interfac.PermissionToJudgeImpl">
+    </bean>
+    <bean id="getUserPermissionInfo"
+		class="com.bsteel.shdc.permission.service.impl.GetUserPermissionInfoImpl">
+    </bean>
+   
+    <bean id="readPropertiesFile" class="com.bsteel.shdc.common.ReadPropertiesFile" init-method="setPropertiesFile"/>
+    
+    <bean id="warrantyService"
+		class="com.bsteel.shdc.warranty.service.impl.WarrantyServiceImpl">
+    </bean> -->
+ <bean id="springContextUtil" class="com.waxberry.spring.util.SpringContextUtil"/>
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="mediaTypes">
+			<map>
+				<!-- <entry key="xml" value="#{vets.contentType}"/>
+				<entry key="atom" value="#{visits.contentType}"/> -->
+			</map>
+		</property>
+		<property name="order" value="0"/>
+	</bean>
+	
+	<!--
+		- The BeanNameViewResolver is used to pick up the visits view name (below).
+		- It has the order property set to 2, which means that this will
+		- be the first view resolver to be used after the delegating content
+		- negotiating view resolver.
+	 -->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="1"/>
+	<!--
+
+		- This bean configures the 'prefix' and 'suffix' properties of
+		- InternalResourceViewResolver, which resolves logical view names
+		- returned by Controllers. For example, a logical view name of "vets"
+		- will be mapped to "/WEB-INF/jsp/vets.jsp".
+	-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/"
+			p:suffix=".jsp" p:order="2"/>
+
+	<!--
+		- The AtomView rendering a Atom feed of the visits
+	 -->
+	<!-- <bean id="visits" class="org.springframework.samples.petclinic.controller.VisitsAtomView"/>
+
+	<bean id="vets" class="org.springframework.web.servlet.view.xml.MarshallingView">
+		<property name="contentType" value="application/vnd.springsource.samples.petclinic+xml"/>
+		<property name="marshaller" ref="marshaller"/>
+	</bean> 
+
+	<oxm:jaxb2-marshaller id="marshaller">
+		<oxm:class-to-be-bound name="org.springframework.samples.petclinic.Vets"/>
+	</oxm:jaxb2-marshaller>
+	-->
+	<!--
+		- Message source for this context, loaded from localized "messages_xx" files.
+		- Could also reside in the root application context, as it is generic,
+		- but is currently just used within PetClinic's web tier.
+	-->
+	<!-- 加载定时任务-->
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+	<task:annotation-driven/>  
+	  
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
+			p:basename="messages"/>
+	<!-- duzheyu 2014/03/28 -->		
+	<!-- <bean id="urlmanager" class="com.bsteel.shdc.common.UrlManager">
+		<constructor-arg>
+			<array>
+				<value>com.bsteel.shdc.common.UrlMappings</value>
+				<value>com.bsteel.shdc.common.HXUrlMappings</value>
+			</array>
+		</constructor-arg>
+	</bean> -->
+	<!-- <bean id="ownerValidator" class="org.springframework.samples.petclinic.validation.OwnerValidator" />
+	 -->
+	 
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	    <property name="messageConverters">
+		    <list>
+		        <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		        <property name="supportedMediaTypes">
+		            <list>
+		            <value>text/plain;charset=GBK</value>
+		            </list>
+		        </property>
+		        </bean>
+		        <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+		    </list>
+	    </property>
+	</bean>
+	 
+</beans>

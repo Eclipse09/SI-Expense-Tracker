@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='GB2312'?>
+<imgList>
+<pic>
+<list path="images/01.jpg"   smallpath="images/01.png" smallinfo="融资服务">javascript:;</list>
+<list path="images/02.jpg"   smallpath="images/02.png" smallinfo="服务特色">javascript:;</list>
+<list path="images/03.jpg"   smallpath="images/03.png" smallinfo="操作效率">javascript:;</list>
+</pic>
+<rollTime fade_in="10">3</rollTime>
+<text font="Arial,雅黑" size="16" bold="true" color="0xffffff"></text>
+</imgList>

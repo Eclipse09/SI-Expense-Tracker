@@ -1,0 +1,37 @@
+<!--index.wxml-->
+<view class="content-view">
+  <view class="ui-flex  ui-p20 subtitle">
+    <text>当月消费</text>
+    <text class="text-today-expend-num">￥{{monthMoney}}元</text>
+  </view>
+</view>
+<view class="line"></view>
+
+<view class='ui-p10 subtitle'>
+  <text>{{year}}年{{month}}月账单</text>
+</view>
+<view class="line"></view>
+<!--文字标题-->
+<view class="history-bill-table-title">
+  <view class="ui-flex-1">类别</view>
+  <view class="ui-flex-1">金额</view>
+</view>
+<view class="line"></view>
+
+
+<!--账单列表-->
+<view class='view-scroll'>
+  <scroll-view scroll-y="true" class="ui-height-100 ">
+    <block wx:for="{{monthBillList}}">
+      <view class="history-bill-list">
+        <view class="ui-flex-1">
+        <image class="spend-way-icon" src="{{item.purposeIcon}}"></image>
+        {{item.purposeName}}</view>
+        <view class="ui-flex-1">￥{{item.spendMoney}}</view>
+      </view>
+    </block>
+  </scroll-view>
+</view>
+
+<button class="button-full" type="primary" open-type="share" data-name="pageShare" id="share">分享</button>
+<button class="button-back" bindtap="backTomine">返回</button>

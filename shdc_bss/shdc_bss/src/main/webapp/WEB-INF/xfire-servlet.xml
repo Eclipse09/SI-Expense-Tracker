@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+    <import resource="classpath:org/codehaus/xfire/spring/xfire.xml" />
+    
+    <bean id="bytToStmService" class="com.bsteel.shdc.external.iface.wms.Impl.BytToStmServiceImpl"></bean>
+
+       <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="urlMap">
+            <map>
+                <entry key="/BytToStmService.ws">
+	            	<ref bean="BytToStmService"/>  
+	          	</entry>
+            </map>
+        </property>
+    </bean>
+    
+    <bean id="BytToStmService" class="org.codehaus.xfire.spring.remoting.XFireExporter">
+        <property name="serviceFactory">
+            <ref bean="xfire.serviceFactory" />
+        </property>
+        <property name="xfire">
+            <ref bean="xfire" />
+        </property>
+        <property name="serviceBean"> 
+	        <ref bean="bytToStmService"/> 
+	    </property> 
+	    <property name="serviceClass"> 
+	        <value>com.bsteel.shdc.external.iface.wms.BytToStmService</value> 
+	    </property> 
+    </bean>
+
+<!--    
+<bean id="world" class="org.codehaus.xfire.spring.remoting.XFireExporter">
+        <property name="serviceFactory">
+            <ref bean="xfire.serviceFactory" />
+        </property>
+        <property name="xfire">
+            <ref bean="xfire" />
+        </property>
+        <property name="serviceBean">
+            <ref bean="world" />
+        </property>
+        <property name="serviceClass">
+            <value>com.service.World</value>
+        </property>
+    </bean>
+
+-->
+</beans>
